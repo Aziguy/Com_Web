@@ -1,6 +1,8 @@
 # Mes importations
 import csv
+import geocoder
 import os
+import socket as so
 from urllib.parse import urlparse
 
 
@@ -188,6 +190,17 @@ def mesDictionnaires(monFichierCsv):
 # noeuds[zonesDNS] = numero  # un index des noeuds (différent pour chaque site)
 #    tab = {}
 
+# ============================================================================
+# Cette fonction permet de récupérer l'adresse d'une zone DNS
+# Elle en paramètre la zoneDNS et retourne ses coordonnées et adresse
+# ============================================================================
+def localisation(url):
+    ipAdd = so.gethostbyname(url)
+    g = geocoder.ip(ipAdd)
+    x = g.latlng
+    y = g.address
+    return x, y
+
 
 # =============================================================================
 # Fonction qui permet d'écrire dans un fichier
@@ -225,16 +238,6 @@ def writeCsvDict(fichierCsv):
             ecriture.writeheader()
             for x in lecture:
                 ecriture.writerow(x)
-
-
-'''
-def localisation(url):
-    ipAdd = so.gethostbyname(url)
-    g = geocoder.ip(ipAdd)
-    x = g.latlng
-    y = g.address
-    return x, y
-'''
 '''
 www.portcrosparcnational.fr-backlinks-subdomains-live-23-Feb-2020_16-35-25-f10142e96c2cbfcacbf0a3fe239127ea
 zoneDnsCible = []
