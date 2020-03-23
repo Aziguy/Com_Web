@@ -1,9 +1,10 @@
 # Mes importations
 import csv
-import geocoder
 import os
 import socket as so
 from urllib.parse import urlparse
+
+import geocoder
 
 
 # =============================================================================
@@ -128,17 +129,21 @@ def exportCsvAhref(csvFile):
 # =============================================================================
 def mesDictionnaires(monFichierCsv):
     with open(monFichierCsv, 'r', encoding='utf-16') as fichier:
-        mesDonnes = csv.reader(fichier, delimiter='\t')
-        next(mesDonnes)
+        mesDonnees = csv.reader(fichier, delimiter='\t')
+        next(mesDonnees)
 
-        # Création de mes dictionnaire soit avec {} soit à partir du constructeur dic()
+        # Création de mes dictionnaire soit avec {} soit à partir du constructeur dict()
         noeuds = dict()
         attribut = dict()
         liens = dict()
 
+        zoneDNSCible = ['www.portcrosparcnational.fr', 'prod-pnpc.parcnational.fr', 'www.portcros-parcnational.fr']
+        for cible in zoneDNSCible:
+            noeuds[cible] = 0  # agregation de la ZoneDNSCible
+
         indexCourant = 1
 
-        for colonne in mesDonnes:
+        for colonne in mesDonnees:
             # Sachant que la colonne[4] est la source
             source = parsage(colonne[4])
             # Sachant que la colonne[8] est la destination
@@ -179,22 +184,11 @@ def mesDictionnaires(monFichierCsv):
     return attribut, liens, noeuds
 
 
-# # Identification de tous les noeuds cibles
-# zoneDNSCible = ['www.portcrosparcnational.fr', 'prod-pnpc.parcnational.fr', 'www.portcros-parcnational.fr']
-# for cible in zoneDNSCible:
-#     noeuds[cible] = 0  # agregation de la ZoneDNSCible
-#
-# # Identification de tous les noeuds sources
-# noeuds = dict()
-# noeuds[zonesDNS] = numero  # un index des noeuds (différent pour chaque site)
-# noeuds[zonesDNS] = numero  # un index des noeuds (différent pour chaque site)
-#    tab = {}
-
 # ============================================================================
-# Cette fonction permet de récupérer l'adresse d'une zone DNS
+# Cette fonction permet de récupérer l'adresse du serveur d'une zone DNS
 # Elle en paramètre la zoneDNS et retourne ses coordonnées et adresse
 # ============================================================================
-def localisation(url):
+def localisationServeur(url):
     ipAdd = so.gethostbyname(url)
     g = geocoder.ip(ipAdd)
     x = g.latlng
@@ -238,62 +232,3 @@ def writeCsvDict(fichierCsv):
             ecriture.writeheader()
             for x in lecture:
                 ecriture.writerow(x)
-'''
-www.portcrosparcnational.fr-backlinks-subdomains-live-23-Feb-2020_16-35-25-f10142e96c2cbfcacbf0a3fe239127ea
-zoneDnsCible = []
-for nomFichierCsv, zoneDnsCible.append(nomFichierCsv.split('backlinks')[0])
-# Pour chaque nom de fichierCSV, zoneDnsCible.append(nomFichierCsv.split('-backlinks')[0])
-
-# Identification de tous les noeuds cibles
-zoneDNSCible = ['www.portcrosparcnational.fr', 'prod-pnpc.parcnational.fr', 'www.portcros-parcnational.fr']
-for cible in zoneDNSCible:
-	noeuds[cible]= 0 # agregation de la ZoneDNSCible
-
-# Identification de tous les noeuds sources
-noeuds = {}
-noeuds[zonesDNS] = numero # un index des noeuds (différent pour chaque site)
-
-tab = {}
-liens = dict()
-
-indexCourant = 1
-for ligne in dataCsv:
-	col = ligne.split() # col[4] est la source
-	source = utils.parsage(col[4])
-	dest = utils.parsage(col[8])
-	
-	if source not in noeud.keys():
-		noeud[source] = indexCourant
-		indexCourant += 1
-		
-		attribut[source] = dict()
-		attribut[source]['Domain Rating'] = utils.nombre(col[1])
-		attribut[source]['Url Rating'] = utils.nombre(col[2])
-        attribut[source]['Referring Domains'] = utils.nombre(col[3])
-        attribut[source]['Referring Page Title'] = col[5]
-        attribut[source]['Internal Links Count'] = utils.nombre(col[6])
-        attribut[source]['External Links Count'] = utils.nombre(col[7])
-        attribut[source]['Link URL'] = col[8]
-        attribut[source]['Text Pre'] = col[9]
-        attribut[source]['LinkAnchor'] = col[10]
-        attribut[source]['Text Post'] = col[11]
-        attribut[source]['Type'] = col[11]
-        attribut[source]['First Seen'] = col[14]
-        attribut[source]['Last Check'] = col[15]
-        attribut[source]['Language'] = col[17]
-        attribut[source]['Traffic'] = utils.nombre(col[18])
-        attribut[source]['Keywords'] = utils.nombre(col[19])
-        attribut[source]['Linked Domains'] = utils.nombre(col[21])
-
-        # Gestion du lien
-        liens[(source, dest)] = 1
-
-	else:
-		if (source, dest) in Liens.keys():
-	        liens[(source, dest)] += 1
-        else:
-	        liens[(source, dest)] = 1
-
-# A ce stade, tous les noeuds et liens sont créés
-
-'''
