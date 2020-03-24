@@ -6,7 +6,16 @@ from urllib.parse import urlparse
 
 import geocoder
 
+""" Quelques commentaires en live
+1. en règle génélrale, je trouve que tes fonctions sont mal nommées. eltFichier par ex.
+est censée extraire le nom DNS à partir d'un nom de fichier. J'aurais mis 
+extractDNS_from_Filename()
+je sais c'est plus long mais tellement plus pratique par la suite (et pour lire le code d'un autre)
 
+2. les commentaires du code c'est bien à l'extérieur. Mais tu peux aussi en faire au sein des fonctions
+
+
+"""
 # =============================================================================
 # Fonction pour convertir un string en int ou float
 # Elle prend en paramètre une chaine de caractere et retoure un nombre
@@ -15,6 +24,14 @@ def eltFichier(csvName):
     zoneDnsCible = []
     x = csvName.split('-backlinks')
     return x
+
+
+def extractDNS_from_Filename(csvName):
+    """Extrait la ZoneDNS à partir du nom de fichier selon la convention
+    de nommage des fichiers exports de ahref.com"""
+    
+    zoneDnsCible = csvName.split('-backlinks')[0]
+    return zoneDnsCible
 
 
 # =============================================================================
@@ -136,7 +153,9 @@ def mesDictionnaires(monFichierCsv):
         noeuds = dict()
         attribut = dict()
         liens = dict()
-
+        
+        
+        
         zoneDNSCible = ['www.portcrosparcnational.fr', 'prod-pnpc.parcnational.fr', 'www.portcros-parcnational.fr']
         for cible in zoneDNSCible:
             noeuds[cible] = 0  # agregation de la ZoneDNSCible
@@ -225,7 +244,7 @@ def writeCsv(fichierCsv):
 
 def writeCsvDict(fichierCsv):
     with open(fichierCsv, 'r') as fichier:
-        lecture = csv.DictReader(fichierCsv)
+        lecture = csv.DictReader(fichier)
         with open('file_out.csv', 'w') as file_out:
             entete = ['Numéro', 'X']
             ecriture = csv.DictWriter(file_out, fieldnames=entete, delimiter='\t')
