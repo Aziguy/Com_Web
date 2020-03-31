@@ -5,16 +5,60 @@ import socket as so
 from urllib.parse import urlparse
 
 import geocoder
+import geopy
+from geopy.geocoders import Nominatim
+
+# geopy.geocoders.options.default_user_agent = 'my_app/1'
+geopy.geocoders.options.default_timeout = None
 
 
 # =============================================================================
 # Fonction pour convertir un string en int ou float
 # Elle prend en paramètre une chaine de caractere et retoure un nombre
 # =============================================================================
-def eltFichier(csvName):
+def extractDNS_from_Filename(csvName):
     zoneDnsCible = []
     x = csvName.split('-backlinks')
     return x
+
+
+# =============================================================================
+# Fonction pour séparer les éléments d'une zone DNS
+# Elle prend en paramètre une chaine de caractere et retoure retourne le 1er ou 2e
+# Element de cette chaine
+# =============================================================================
+def dnsZoneSpliting(zoneDNS):
+    racine = ''
+    if zoneDNS == '':
+        pass
+    else:
+        element = zoneDNS.split('.')
+        if len(element) == 2:
+            racine = element[0]
+        else:
+            racine = element[1]
+    return racine
+
+
+# =============================================================================
+# Fonction pour récupérer les coordonnées d'un acteur
+# Elle prend en paramètre une chaine et retourne ses coordonnées
+# =============================================================================
+def getFullAdress(maChaine):
+    monAdresse = ''
+    mesCoordonnees = []
+    geolocator = Nominatim(user_agent="my-application")
+    if maChaine == '':
+        pass
+    else:
+        location = geolocator.geocode(maChaine)
+        if location == None:
+            monAdresse = 'Nan'
+            mesCoordonnees = 'Nan'
+        else:
+            monAdresse = location.address
+            mesCoordonnees = location.latitude, location.longitude
+    return monAdresse, mesCoordonnees
 
 
 # =============================================================================
@@ -45,28 +89,11 @@ def parsage(url):
 
 
 # =============================================================================
-# Fonction pour avoir le nombre total d'url différent d'une liste
-# Elle prend en paramètre une liste d'url et retourne le total d'url différent de la liste
-# =============================================================================
-def nbreDifUrl(liste):
-    tabUrl = []
-    nbreUrl = []
-
-    for element in liste:
-        temp = element[6]
-        tabUrl.append(temp)
-    for x in tabUrl:
-        if x not in nbreUrl:
-            nbreUrl.append(x)
-    return len(nbreUrl)
-
-
-# =============================================================================
 # Fonction qui compte le nombre de fois qu'une url est présente dans une liste
 # Elle prend en paramètre une liste et retourne un dictionnaire contenant chaque url et son nombre d'ocurence dans la liste
 # =============================================================================
 def occurences(maListe):
-    dictDiffUrl = {}
+    dictDiffUrl = dict()
     for element in maListe:
         if element == '':
             pass
@@ -194,41 +221,3 @@ def localisationServeur(url):
     x = g.latlng
     y = g.address
     return x, y
-
-
-# =============================================================================
-# Fonction qui permet d'écrire dans un fichier
-# Elle prend en paramètre une liste et retourne un dictionnaire contenant chaque url et son nombre d'ocurence dans la liste
-# =============================================================================
-def createCsv():
-    with open('sortieZoneA.csv', 'a', encoding='utf-8', newline='') as fichierSortie:
-        csv_sortie = csv.writer(fichierSortie)
-        fichierVide = os.stat('sortieZoneA.csv').st_size == 0
-        if fichierVide:
-            csv_sortie.writerow(['Numéro', 'DNS sources', 'Occurences', 'DNS cibles'])
-        else:
-            csv_sortie.writerow([numero, dnsSource, occurences, dnsCible])
-
-
-# =============================================================================
-# Fonction qui permet d'écrire dans un fichier
-# Elle prend en paramètre un csv et écrit son contenu dans un autre fichier csv
-# =============================================================================
-def writeCsv(fichierCsv):
-    with open(fichierCsv, 'r') as fichier:
-        lecture = csv.reader(fichier)
-        with open('zoneDNS_A.csv', 'w') as file_out:
-            ecriture = csv.writer(file_out, delimiter='\t')
-            for ligne in lecture:
-                ecriture.writerow(ligne)
-
-
-def writeCsvDict(fichierCsv):
-    with open(fichierCsv, 'r') as fichier:
-        lecture = csv.DictReader(fichierCsv)
-        with open('file_out.csv', 'w') as file_out:
-            entete = ['Numéro', 'X']
-            ecriture = csv.DictWriter(file_out, fieldnames=entete, delimiter='\t')
-            ecriture.writeheader()
-            for x in lecture:
-                ecriture.writerow(x)
