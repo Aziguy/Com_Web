@@ -2,10 +2,13 @@
 import csv
 import os
 import socket as so
+import time
 from urllib.parse import urlparse
 
 import geocoder
 import geopy
+from arcgis.geocoding import geocode
+from arcgis.gis import GIS
 from geopy.geocoders import Nominatim
 
 # geopy.geocoders.options.default_user_agent = 'my_app/1'
@@ -41,13 +44,48 @@ def dnsZoneSpliting(zoneDNS):
 
 
 # =============================================================================
+# ArcGis
+# Fonction pour récupérer les coordonnées de la zone DNS
+# Elle prend en paramètre une zone DNS et retourne ses coordonnées (adresse complète)
+# =============================================================================
+def getFullAdress(zoneDNS):
+    dns = zoneDNS
+    adresse = ''
+    latitude = ''
+    longitude = ''
+    gis = GIS()  # entrer ces identifiants gis = GIS("http://www.arcgis.com", "MonPseudo", "leMotDePasse2020")
+    geocode_result = geocode(address=dns)
+
+    for x in geocode_result:
+        if 'FR' in x['attributes']['Country'] and 'Var' in (
+                x['attributes']['LongLabel'] or x['attributes']['Subregion']):
+            adresse = x['attributes']['LongLabel']
+            latitude = x['attributes']['X']
+            longitude = x['attributes']['Y']
+
+        with open('fullAdressesZoneDNS.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
+            csv_sortie = csv.writer(fichierSortie, delimiter='\t')
+            fichierVide = os.stat('fullAdressesZoneDNS.csv').st_size == 0
+            if fichierVide:
+                csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes'])
+            else:
+                csv_sortie.writerow([dns, adresse, latitude, longitude])
+        time.sleep(2)
+    return csv_sortie
+
+
+# =============================================================================
+# Geopy
 # Fonction pour récupérer les coordonnées d'un acteur
 # Elle prend en paramètre une chaine et retourne ses coordonnées
 # =============================================================================
-def getFullAdress(maChaine):
+def getFullAdressByGeopy(maChaine):
     monAdresse = ''
     mesCoordonnees = []
     geolocator = Nominatim(user_agent="my-application")
+    geolocator = Nominatim(user_agent="my-application")
+    from geopy.extra.rate_limiter import RateLimiter
+    geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
     if maChaine == '':
         pass
     else:

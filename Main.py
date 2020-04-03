@@ -2,7 +2,7 @@
 import networkx as nx
 import pandas as pd
 
-import utilities as utils
+import Utilities as utils
 
 # =============================================================================
 # Lecture du fichier www.portcrosparcnational.fr-backlinks-subdomains.csv
