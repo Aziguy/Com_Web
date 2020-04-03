@@ -51,26 +51,32 @@ def dnsZoneSpliting(zoneDNS):
 def getFullAdress(zoneDNS):
     dns = zoneDNS
     adresse = ''
-    latitude = ''
-    longitude = ''
-    gis = GIS()  # entrer ces identifiants gis = GIS("http://www.arcgis.com", "MonPseudo", "leMotDePasse2020")
+    latitude = 0
+    longitude = 0
+    csv_sortie = []
+    gis = GIS()
     geocode_result = geocode(address=dns)
 
     for x in geocode_result:
         if 'FR' in x['attributes']['Country'] and 'Var' in (
                 x['attributes']['LongLabel'] or x['attributes']['Subregion']):
+
             adresse = x['attributes']['LongLabel']
             latitude = x['attributes']['X']
             longitude = x['attributes']['Y']
 
-        with open('fullAdressesZoneDNS.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
-            csv_sortie = csv.writer(fichierSortie, delimiter='\t')
-            fichierVide = os.stat('fullAdressesZoneDNS.csv').st_size == 0
-            if fichierVide:
-                csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes'])
-            else:
-                csv_sortie.writerow([dns, adresse, latitude, longitude])
-        time.sleep(2)
+            with open('fullAdressesZoneDNS.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
+                csv_sortie = csv.writer(fichierSortie, delimiter='\t')
+                fichierVide = os.stat('fullAdressesZoneDNS.csv').st_size == 0
+
+                if fichierVide:
+                    csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes'])
+                else:
+                    csv_sortie.writerow([dns, adresse, latitude, longitude])
+            time.sleep(2)
+        else:
+            pass
+            # raise ValueError("{0} ne correspond pas aux critères".format(dns))
     return csv_sortie
 
 
