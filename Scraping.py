@@ -1,10 +1,14 @@
 # Mes importations
-import pandas as pd
-
 import Utilities as utils
 
-df = pd.read_csv('outputs/zoneDNS.csv', encoding='utf-16', sep='\t')
-df['DNSSource2'] = df['DNS Source'].apply(lambda x: utils.getFullAdress(x) if x else None)
+# Récupération des adresses des zones DNS
+# tqdm.pandas()
+# df = pd.read_csv('outputs/zoneDNS.csv', encoding='utf-16', sep='\t')
+# df['DNSSource2'] = df['DNS Source'].progress_apply(lambda x: utils.getFullAdress(x))
+
+# Visualisation des zone DNS sur la carte
+monFichier = 'outputs/fullAdressesZoneDNS.csv'
+utils.showMapFromAdress(monFichier)
 # Lecture du fichier csv
 # df = pd.read_csv('datasets/Acteurs-csv-test.csv', encoding='utf-8', sep=';')
 # df['Complémentaire'] = df['Acteurs '].apply(lambda x : utils.getFullAdress(x))
@@ -20,17 +24,3 @@ df['DNSSource2'] = df['DNS Source'].apply(lambda x: utils.getFullAdress(x) if x 
 # geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
 # df['Coordonnées'] = clearAdresse.apply(lambda x : utils.getFullAdress(x))
 # outputsCSV = df['Coordonnées'].to_csv('outputs/coordos.csv', encoding='utf-16', index=False, header=True, sep='\t')
-'''
-daf = pd.DataFrame({'name': ['paris', 'berlin', 'london']})
-from geopy.geocoders import Nominatim
-
-geolocator = Nominatim(user_agent="specify_your_app_name_here")
-from geopy.extra.rate_limiter import RateLimiter
-
-geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
-daf['location'] = daf['name'].apply(geocode)
-#
-# daf['point'] = daf['location'].apply(lambda loc: tuple(loc.point) if loc else None)
-# print(daf)
-
-'''

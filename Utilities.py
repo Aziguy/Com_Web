@@ -5,8 +5,10 @@ import socket as so
 import time
 from urllib.parse import urlparse
 
+import folium
 import geocoder
 import geopy
+import pandas as pd
 from arcgis.geocoding import geocode
 from arcgis.gis import GIS
 from geopy.geocoders import Nominatim
@@ -23,6 +25,21 @@ def extractDNS_from_Filename(csvName):
     zoneDnsCible = []
     x = csvName.split('-backlinks')
     return x
+
+
+# =============================================================================
+# Fonction qui permet de représenter un fichier d'adresse sur la carte
+# Elle prend en paramètre un fichier csv et retourne un fichier html contenant la
+# la représentation visuelle des adresses contenues dans le fichier csv donné en entrée
+# =============================================================================
+def showMapFromAdress(fichier):
+    df = pd.read_csv(fichier, encoding='utf-16', sep='\t')  # Lecture du fichier d'adresses
+    m = folium.Map([43.9351691, 6.0679194], zoom_start=6)  # La localisation de départ pour cadrer les résultats
+    for (index, row) in df.iterrows():
+        folium.Marker(location=[row['Latitudes'], row['Longitudes']], popup=row['Zone DNS'], tooltip=row['Adresses'],
+                      icon=folium.Icon(color='red', icon='info-sign')).add_to(
+            m)  # Inscris un marqueur aux endroits donnés avec la lontitude et lagitude
+        m.save(outfile='outputs/ZoneDNS.html')  # Le fichier de sortie est une map au format "html"
 
 
 # =============================================================================
@@ -62,12 +79,12 @@ def getFullAdress(zoneDNS):
                 x['attributes']['LongLabel'] or x['attributes']['Subregion']):
 
             adresse = x['attributes']['LongLabel']
-            latitude = x['attributes']['X']
-            longitude = x['attributes']['Y']
+            latitude = x['attributes']['Y']
+            longitude = x['attributes']['X']
 
-            with open('fullAdressesZoneDNS.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
+            with open('outputs/fullAdressesZoneDNS.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
                 csv_sortie = csv.writer(fichierSortie, delimiter='\t')
-                fichierVide = os.stat('fullAdressesZoneDNS.csv').st_size == 0
+                fichierVide = os.stat('outputs/fullAdressesZoneDNS.csv').st_size == 0
 
                 if fichierVide:
                     csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes'])
