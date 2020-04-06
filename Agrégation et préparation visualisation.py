@@ -5,15 +5,6 @@ Created on Mon Apr  6 10:32:45 2020
 @author: Admin
 """
 
-
-#************************[ Notes ]************************************************************************************
-
-"""
-
-1- Il serait intéressant de trouver comment supprimer l'ancien index des 3 bases de données initiales
-
-"""
-
 #************************[ Librairies Utilisées ]************************************************************************************
 
 
