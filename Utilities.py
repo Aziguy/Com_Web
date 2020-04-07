@@ -1,5 +1,6 @@
 # Mes importations
 import csv
+import json
 import os
 import socket as so
 import time
@@ -11,11 +12,15 @@ import geopy
 import pandas as pd
 from arcgis.geocoding import geocode
 from arcgis.gis import GIS
+from folium import plugins
 from geopy.geocoders import Nominatim
+from haversine import haversine
 
 # geopy.geocoders.options.default_user_agent = 'my_app/1'
 geopy.geocoders.options.default_timeout = None
 
+
+# folium.Choropleth
 
 # =============================================================================
 # Fonction pour convertir un string en int ou float
@@ -28,6 +33,18 @@ def extractDNS_from_Filename(csvName):
 
 
 # =============================================================================
+# Fonction qui permet de déterminer la distance entre un lieu donné et le parc port-cros
+# Elle prend en paramètre la latitude et la longitude du lieu fait des calculs, et retourne
+# la distance en km entre les deux lieux (lieu x et le parc
+# =============================================================================
+def getDistanceBtwPoints(lat, lon):
+    lieuX = (lat, lon)
+    parc = (43.0650392, 5.8936821)
+    distance = haversine(lieuX, parc)
+    return round(distance, 3)
+
+
+# =============================================================================
 # Fonction qui permet de représenter un fichier d'adresse sur la carte
 # Elle prend en paramètre un fichier csv et retourne un fichier html contenant la
 # la représentation visuelle des adresses contenues dans le fichier csv donné en entrée
@@ -35,11 +52,34 @@ def extractDNS_from_Filename(csvName):
 def showMapFromAdress(fichier):
     df = pd.read_csv(fichier, encoding='utf-16', sep='\t')  # Lecture du fichier d'adresses
     m = folium.Map([43.9351691, 6.0679194], zoom_start=6)  # La localisation de départ pour cadrer les résultats
+    m_Controle = plugins.MeasureControl(position='topleft', active_color='blue', completed_color='red',
+                                        primary_length_unit='meters')
+    m.add_child(m_Controle)
     for (index, row) in df.iterrows():
         folium.Marker(location=[row['Latitudes'], row['Longitudes']], popup=row['Zone DNS'], tooltip=row['Adresses'],
                       icon=folium.Icon(color='red', icon='info-sign')).add_to(
             m)  # Inscris un marqueur aux endroits donnés avec la lontitude et lagitude
-        m.save(outfile='outputs/ZoneDNS.html')  # Le fichier de sortie est une map au format "html"
+        m.save(outfile='outputs/MapZoneDNS.html')  # Le fichier de sortie est une map au format "html"
+
+
+def showChoroplethFromAdress(f_csv, f_geojson):
+    # Chargement du fichier json
+    with open(f_geojson) as var:
+        communes = json.load(var)
+    for i in communes['features']:
+        i['id'] = i['properties']['nom']
+    # Chargement du fichier csv
+    zoneDNS = pd.read_csv(f_csv, encoding='utf-16', sep='\t')
+    # Carte
+    mapChoropleth = folium.Map([43.9351691, 6.0679194],
+                               zoom_start=6)  # La localisation de départ pour cadrer les résultats
+    # Choropleth
+    folium.Choropleth(geo_data=communes, name='choropleth', data=zoneDNS, columns=['Communes', 'Occurrences'],
+                      key_on='feature.id', fill_color='BuPu', fill_opacity=0.7, line_opacity=0.2,
+                      legend_name='Occurrences', highlight=True).add_to(mapChoropleth)
+    # Calque de controle (activer ou désactiver Choropleth sur la carte
+    folium.LayerControl().add_to(mapChoropleth)
+    return mapChoropleth.save(outfile='outputs/choroplethMapZoneDNS.html')
 
 
 # =============================================================================
@@ -70,9 +110,13 @@ def getFullAdress(zoneDNS):
     adresse = ''
     latitude = 0
     longitude = 0
+    codePostale = 0
     csv_sortie = []
-    gis = GIS()
-    geocode_result = geocode(address=dns)
+    gis = GIS("http://www.arcgis.com", "Azig", "")
+    if zoneDNS == '':
+        pass
+    else:
+        geocode_result = geocode(address=dns)
 
     for x in geocode_result:
         if 'FR' in x['attributes']['Country'] and 'Var' in (
@@ -81,15 +125,16 @@ def getFullAdress(zoneDNS):
             adresse = x['attributes']['LongLabel']
             latitude = x['attributes']['Y']
             longitude = x['attributes']['X']
+            codePostale = x['attributes']['Postal']
 
-            with open('outputs/fullAdressesZoneDNS.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
+            with open('outputs/ZoneDNSFullAdressesZoneDNS.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
                 csv_sortie = csv.writer(fichierSortie, delimiter='\t')
-                fichierVide = os.stat('outputs/fullAdressesZoneDNS.csv').st_size == 0
+                fichierVide = os.stat('outputs/ZoneDNSFullAdressesZoneDNS.csv').st_size == 0
 
                 if fichierVide:
-                    csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes'])
+                    csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes', 'Codes'])
                 else:
-                    csv_sortie.writerow([dns, adresse, latitude, longitude])
+                    csv_sortie.writerow([dns, adresse, latitude, longitude, codePostale])
             time.sleep(2)
         else:
             pass
