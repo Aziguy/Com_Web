@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<head>
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type"/>
+
+    <script>
+        L_NO_TOUCH = false;
+        L_DISABLE_3D = false;
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" rel="stylesheet"/>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"
+          rel="stylesheet"/>
+    <link href="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"
+          rel="stylesheet"/>
+    <style>html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }</style>
+    <style>#map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+    }</style>
+
+    <meta content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+    <style>
+        #map_66b75f72fcaf4225b370f41cc220ed91 {
+            position: relative;
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+        }
+    </style>
+
+    <script src="https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.js"></script>
+    <link href="https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.css" rel="stylesheet"/>
+    <link href="https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css"
+          rel="stylesheet"/>
+    <script src="https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js"></script>
+</head>
+<body>
+
+<div class="folium-map" id="map_66b75f72fcaf4225b370f41cc220ed91"></div>
+
+</body>
+<script>
+
+    var map_66b75f72fcaf4225b370f41cc220ed91 = L.map(
+        "map_66b75f72fcaf4225b370f41cc220ed91",
+        {
+            center: [43.9351691, 6.0679194],
+            crs: L.CRS.EPSG3857,
+            zoom: 6,
+            zoomControl: true,
+            preferCanvas: false,
+        }
+    );
+
+
+    var tile_layer_d2c4846586714ada94437d58c457ed44 = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+            "attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.",
+            "detectRetina": false,
+            "maxNativeZoom": 18,
+            "maxZoom": 18,
+            "minZoom": 0,
+            "noWrap": false,
+            "opacity": 1,
+            "subdomains": "abc",
+            "tms": false
+        }
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var measure_control_00f0772fe09e47aca93d2e3229d8734c = new L.Control.Measure(
+        {
+            "activeColor": "blue",
+            "completedColor": "red",
+            "position": "topleft",
+            "primaryAreaUnit": "sqmeters",
+            "primaryLengthUnit": "meters",
+            "secondaryAreaUnit": "acres",
+            "secondaryLengthUnit": "miles"
+        });
+    map_66b75f72fcaf4225b370f41cc220ed91.addControl(measure_control_00f0772fe09e47aca93d2e3229d8734c);
+
+
+    var marker_3da4585a32b841cdad642191051aa962 = L.marker(
+        [43.00997000000007, 6.381690000000049],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_164dee14cf124aa699a5d0ef19e8b2ca = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 10592,
+            "textColor": "red"
+        }
+    )
+    marker_3da4585a32b841cdad642191051aa962.setIcon(beautify_icon_164dee14cf124aa699a5d0ef19e8b2ca);
+
+
+    var popup_d075f5d5b67f434d9e7c066f3e3a7f7d = L.popup({"maxWidth": "100%"});
+
+
+    var html_21b9780f0a8246cd8f0e3e21d95f62b3 = $(`<div id="html_21b9780f0a8246cd8f0e3e21d95f62b3" style="width: 100.0%; height: 100.0%;">www.portcros-parcnational.fr</div>`)[0];
+    popup_d075f5d5b67f434d9e7c066f3e3a7f7d.setContent(html_21b9780f0a8246cd8f0e3e21d95f62b3);
+
+
+    marker_3da4585a32b841cdad642191051aa962.bindPopup(popup_d075f5d5b67f434d9e7c066f3e3a7f7d)
+    ;
+
+
+    marker_3da4585a32b841cdad642191051aa962.bindTooltip(
+        `<div>
+                     Parc National de Port-Cros, 83400, Hyères, Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_01375a2ebbe4414bb846b6276908e67e = L.marker(
+        [43.02159000000007, 6.325020000000053],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_074b378b62ce4fbca69b1a0624ca5927 = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 5000,
+            "textColor": "red"
+        }
+    )
+    marker_01375a2ebbe4414bb846b6276908e67e.setIcon(beautify_icon_074b378b62ce4fbca69b1a0624ca5927);
+
+
+    var popup_43c46b5052ee48aaa5bd9153e609514a = L.popup({"maxWidth": "100%"});
+
+
+    var html_120c0da1498d46a68cb5ff204c92ab78 = $(`<div id="html_120c0da1498d46a68cb5ff204c92ab78" style="width: 100.0%; height: 100.0%;">www.portcros-parcnational.fr</div>`)[0];
+    popup_43c46b5052ee48aaa5bd9153e609514a.setContent(html_120c0da1498d46a68cb5ff204c92ab78);
+
+
+    marker_01375a2ebbe4414bb846b6276908e67e.bindPopup(popup_43c46b5052ee48aaa5bd9153e609514a)
+    ;
+
+
+    marker_01375a2ebbe4414bb846b6276908e67e.bindTooltip(
+        `<div>
+                     Parc National de Port-Cros, Département du Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_c4e0b4cb4e39484cb0bedb9e29923c6c = L.marker(
+        [43.21456000000007, 6.6135000000000455],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_cef9a5751c6d4a24883857cfef835c9e = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 8328,
+            "textColor": "red"
+        }
+    )
+    marker_c4e0b4cb4e39484cb0bedb9e29923c6c.setIcon(beautify_icon_cef9a5751c6d4a24883857cfef835c9e);
+
+
+    var popup_4357b7e5df674de08c07116c95222e0e = L.popup({"maxWidth": "100%"});
+
+
+    var html_e7586b3a55754b9885143ab54639ada3 = $(`<div id="html_e7586b3a55754b9885143ab54639ada3" style="width: 100.0%; height: 100.0%;">www.ramatuelle-tourisme.com</div>`)[0];
+    popup_4357b7e5df674de08c07116c95222e0e.setContent(html_e7586b3a55754b9885143ab54639ada3);
+
+
+    marker_c4e0b4cb4e39484cb0bedb9e29923c6c.bindPopup(popup_4357b7e5df674de08c07116c95222e0e)
+    ;
+
+
+    marker_c4e0b4cb4e39484cb0bedb9e29923c6c.bindTooltip(
+        `<div>
+                     Ramatuelle, Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_80fb342598614eeea84707d5e6a6431d = L.marker(
+        [43.413920000000076, 6.016670000000032],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_5f1494b0e0154a2e933c816999b89306 = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 6000,
+            "textColor": "red"
+        }
+    )
+    marker_80fb342598614eeea84707d5e6a6431d.setIcon(beautify_icon_5f1494b0e0154a2e933c816999b89306);
+
+
+    var popup_73f5b18715fe4736972b5fac96da94fe = L.popup({"maxWidth": "100%"});
+
+
+    var html_38f4be29653746d2b33193a454dfb8b6 = $(`<div id="html_38f4be29653746d2b33193a454dfb8b6" style="width: 100.0%; height: 100.0%;">www.ramatuelle-tourisme.com</div>`)[0];
+    popup_73f5b18715fe4736972b5fac96da94fe.setContent(html_38f4be29653746d2b33193a454dfb8b6);
+
+
+    marker_80fb342598614eeea84707d5e6a6431d.bindPopup(popup_73f5b18715fe4736972b5fac96da94fe)
+    ;
+
+
+    marker_80fb342598614eeea84707d5e6a6431d.bindTooltip(
+        `<div>
+                     Ramatuelle, Brignoles, Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_1dc95a09600049419ac96c95ea135730 = L.marker(
+        [43.13620000000003, 5.753320000000031],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_2c04eadb31e943178543de3e2955fd19 = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 83560,
+            "textColor": "red"
+        }
+    )
+    marker_1dc95a09600049419ac96c95ea135730.setIcon(beautify_icon_2c04eadb31e943178543de3e2955fd19);
+
+
+    var popup_eb8afec22d7f4fddb9e5346202680489 = L.popup({"maxWidth": "100%"});
+
+
+    var html_02063e2e51b04416bf56c2cd7638df66 = $(`<div id="html_02063e2e51b04416bf56c2cd7638df66" style="width: 100.0%; height: 100.0%;">www.bandol-blog.com</div>`)[0];
+    popup_eb8afec22d7f4fddb9e5346202680489.setContent(html_02063e2e51b04416bf56c2cd7638df66);
+
+
+    marker_1dc95a09600049419ac96c95ea135730.bindPopup(popup_eb8afec22d7f4fddb9e5346202680489)
+    ;
+
+
+    marker_1dc95a09600049419ac96c95ea135730.bindTooltip(
+        `<div>
+                     Bandol, Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_2bd32421b80d478ca9a9c5812fdc5161 = L.marker(
+        [43.00997000000007, 6.381690000000049],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_3ad2ce9dccad468eaa0943eeaaffc139 = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 17200,
+            "textColor": "red"
+        }
+    )
+    marker_2bd32421b80d478ca9a9c5812fdc5161.setIcon(beautify_icon_3ad2ce9dccad468eaa0943eeaaffc139);
+
+
+    var popup_e58899e6a99e486fb17b7a2f738dd49d = L.popup({"maxWidth": "100%"});
+
+
+    var html_2e7f16977eb4429b869a83637b625a39 = $(`<div id="html_2e7f16977eb4429b869a83637b625a39" style="width: 100.0%; height: 100.0%;">www.portcros-parcnational.fr</div>`)[0];
+    popup_e58899e6a99e486fb17b7a2f738dd49d.setContent(html_2e7f16977eb4429b869a83637b625a39);
+
+
+    marker_2bd32421b80d478ca9a9c5812fdc5161.bindPopup(popup_e58899e6a99e486fb17b7a2f738dd49d)
+    ;
+
+
+    marker_2bd32421b80d478ca9a9c5812fdc5161.bindTooltip(
+        `<div>
+                     Parc National de Port-Cros, 83400, Hyères, Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_6890e20aa0a04058b240f37eac427991 = L.marker(
+        [43.02159000000007, 6.325020000000053],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_dd96032dbc564ec3b3530255ec33ca7a = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 11598,
+            "textColor": "red"
+        }
+    )
+    marker_6890e20aa0a04058b240f37eac427991.setIcon(beautify_icon_dd96032dbc564ec3b3530255ec33ca7a);
+
+
+    var popup_ec5d561729e549aeae634d65ca384123 = L.popup({"maxWidth": "100%"});
+
+
+    var html_e3cfe62d6a674b9aa8f213377fc85c0a = $(`<div id="html_e3cfe62d6a674b9aa8f213377fc85c0a" style="width: 100.0%; height: 100.0%;">www.portcros-parcnational.fr</div>`)[0];
+    popup_ec5d561729e549aeae634d65ca384123.setContent(html_e3cfe62d6a674b9aa8f213377fc85c0a);
+
+
+    marker_6890e20aa0a04058b240f37eac427991.bindPopup(popup_ec5d561729e549aeae634d65ca384123)
+    ;
+
+
+    marker_6890e20aa0a04058b240f37eac427991.bindTooltip(
+        `<div>
+                     Parc National de Port-Cros, Département du Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_6bac8c071b2e48648249554d2ede8107 = L.marker(
+        [43.21456000000007, 6.6135000000000455],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_dbce50de26414e4fbb2a16ce0028b27f = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 50,
+            "textColor": "red"
+        }
+    )
+    marker_6bac8c071b2e48648249554d2ede8107.setIcon(beautify_icon_dbce50de26414e4fbb2a16ce0028b27f);
+
+
+    var popup_2ad145153f174caf8b1d3bf72fe618c6 = L.popup({"maxWidth": "100%"});
+
+
+    var html_be97d4156261457d88f98e575b75eb88 = $(`<div id="html_be97d4156261457d88f98e575b75eb88" style="width: 100.0%; height: 100.0%;">www.ramatuelle-tourisme.com</div>`)[0];
+    popup_2ad145153f174caf8b1d3bf72fe618c6.setContent(html_be97d4156261457d88f98e575b75eb88);
+
+
+    marker_6bac8c071b2e48648249554d2ede8107.bindPopup(popup_2ad145153f174caf8b1d3bf72fe618c6)
+    ;
+
+
+    marker_6bac8c071b2e48648249554d2ede8107.bindTooltip(
+        `<div>
+                     Ramatuelle, Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_60214b3c792c4ac894ed22fc753221cc = L.marker(
+        [43.413920000000076, 6.016670000000032],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_19032e8994df408c99f97183027a2c67 = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 25,
+            "textColor": "red"
+        }
+    )
+    marker_60214b3c792c4ac894ed22fc753221cc.setIcon(beautify_icon_19032e8994df408c99f97183027a2c67);
+
+
+    var popup_c28441ab841e4996bfd98a2b20b8e8da = L.popup({"maxWidth": "100%"});
+
+
+    var html_d4c8ed8eaaa947c9a8976625d3b7d3a6 = $(`<div id="html_d4c8ed8eaaa947c9a8976625d3b7d3a6" style="width: 100.0%; height: 100.0%;">www.ramatuelle-tourisme.com</div>`)[0];
+    popup_c28441ab841e4996bfd98a2b20b8e8da.setContent(html_d4c8ed8eaaa947c9a8976625d3b7d3a6);
+
+
+    marker_60214b3c792c4ac894ed22fc753221cc.bindPopup(popup_c28441ab841e4996bfd98a2b20b8e8da)
+    ;
+
+
+    marker_60214b3c792c4ac894ed22fc753221cc.bindTooltip(
+        `<div>
+                     Ramatuelle, Brignoles, Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+
+    var marker_0b1ac06236a0458a904a98a048c3a91e = L.marker(
+        [43.010170000000066, 6.382050000000049],
+        {}
+    ).addTo(map_66b75f72fcaf4225b370f41cc220ed91);
+
+
+    var beautify_icon_c6de0b58c65d49258547830dcded048a = new L.BeautifyIcon.icon(
+        {
+            "backgroundColor": "#FFF",
+            "borderColor": "blue",
+            "borderWidth": 1,
+            "innerIconStyle": "margin-top:0px;",
+            "isAlphaNumericIcon": true,
+            "spin": false,
+            "text": 380,
+            "textColor": "red"
+        }
+    )
+    marker_0b1ac06236a0458a904a98a048c3a91e.setIcon(beautify_icon_c6de0b58c65d49258547830dcded048a);
+
+
+    var popup_be811866d79a4886abca7563ff379f3d = L.popup({"maxWidth": "100%"});
+
+
+    var html_30104aef4b7f42f883f1392c8ac0829d = $(`<div id="html_30104aef4b7f42f883f1392c8ac0829d" style="width: 100.0%; height: 100.0%;">fort-eminence-port-cros.blogspot.com</div>`)[0];
+    popup_be811866d79a4886abca7563ff379f3d.setContent(html_30104aef4b7f42f883f1392c8ac0829d);
+
+
+    marker_0b1ac06236a0458a904a98a048c3a91e.bindPopup(popup_be811866d79a4886abca7563ff379f3d)
+    ;
+
+
+    marker_0b1ac06236a0458a904a98a048c3a91e.bindTooltip(
+        `<div>
+                     Port-Cros, Département du Var, Provence-Alpes-Côte d'Azur, FRA
+                 </div>`,
+        {"sticky": true}
+    );
+
+</script>

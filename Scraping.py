@@ -13,11 +13,15 @@ tqdm.pandas()
 # utils.showMapFromAdress(monFichier)
 
 # Visualisation des zones DNS en mode choropleth
+# monCSV = 'datasets/ZoneDNSFullAdressesZoneDNS.csv'
+# monGeoJson = 'datasets/communes-83-var.geojson'
+# utils.showChoroplethFromAdress(monCSV, monGeoJson)
+
+# Visualisation des zones en mode enumerate markers
 monCSV = 'datasets/ZoneDNSFullAdressesZoneDNS.csv'
-monGeoJson = 'datasets/communes-83-var.geojson'
-utils.showChoroplethFromAdress(monCSV, monGeoJson)
+utils.showEnumerateMarkers(monCSV)
 # Lecture du fichier csv
-# df = pd.read_csv('datasets/Index-réseau.csv', encoding='utf-16', sep='\t')
+# df = pd.read_csv('datasets/index_reseau.csv', encoding='utf-16', sep='\t')
 # df['Complémentaire'] = df['DNS Source'].progress_apply(lambda x : utils.getFullAdress(x))
 # print(df['Complémentaire'].head(3))
 

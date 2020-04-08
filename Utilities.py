@@ -43,7 +43,19 @@ def getDistanceBtwPoints(lat, lon):
     distance = haversine(lieuX, parc)
     return round(distance, 3)
 
-
+def showEnumerateMarkers(fichier):
+    df = pd.read_csv(fichier, encoding='utf-16', sep='\t')  # Lecture du fichier d'adresses
+    # Carte
+    m = folium.Map([43.9351691, 6.0679194], zoom_start=6)  # La localisation de départ pour cadrer les résultats
+    m_Controle = plugins.MeasureControl(position='topleft', active_color='blue', completed_color='red',
+                                        primary_length_unit='meters')
+    m.add_child(m_Controle)
+    # icons utilisant plugins.BeautifyIcon
+    for (index, row) in df.iterrows():
+        folium.Marker(location=[row['Latitudes'], row['Longitudes']], popup=row['Zone DNS'], tooltip=row['Adresses'],
+                      icon=plugins.BeautifyIcon(number=row['Occurrences'], border_color='#000', border_width=1,
+                                                text_color='#FFF', inner_icon_style='margin-top:0px;')).add_to(m)
+    return m.save(outfile='outputs/EnumerateMarkersZoneDNS.html')  # Le fichier de sortie est une map au format "html"
 # =============================================================================
 # Fonction qui permet de représenter un fichier d'adresse sur la carte
 # Elle prend en paramètre un fichier csv et retourne un fichier html contenant la
@@ -71,12 +83,13 @@ def showChoroplethFromAdress(f_csv, f_geojson):
     # Chargement du fichier csv
     zoneDNS = pd.read_csv(f_csv, encoding='utf-16', sep='\t')
     # Carte
+    bins = list(zoneDNS['Communes'].quantile([0, 0.25, 0.5, 0.75, 1]))
     mapChoropleth = folium.Map([43.9351691, 6.0679194],
                                zoom_start=6)  # La localisation de départ pour cadrer les résultats
     # Choropleth
     folium.Choropleth(geo_data=communes, name='choropleth', data=zoneDNS, columns=['Communes', 'Occurrences'],
                       key_on='feature.id', fill_color='BuPu', fill_opacity=0.7, line_opacity=0.2,
-                      legend_name='Occurrences', highlight=True).add_to(mapChoropleth)
+                      legend_name='Occurrences', highlight=True, bins=bins, reset=True).add_to(mapChoropleth)
     # Calque de controle (activer ou désactiver Choropleth sur la carte
     folium.LayerControl().add_to(mapChoropleth)
     return mapChoropleth.save(outfile='outputs/choroplethMapZoneDNS.html')
@@ -108,11 +121,12 @@ def dnsZoneSpliting(zoneDNS):
 def getFullAdress(zoneDNS):
     dns = zoneDNS
     adresse = ''
+    commune = ''
     latitude = 0
     longitude = 0
     codePostale = 0
     csv_sortie = []
-    gis = GIS("http://www.arcgis.com", "Azig", "")
+    gis = GIS("http://www.arcgis.com", "Pseudo2020", "MotDePasse2020")
     if zoneDNS == '':
         pass
     else:
@@ -126,15 +140,16 @@ def getFullAdress(zoneDNS):
             latitude = x['attributes']['Y']
             longitude = x['attributes']['X']
             codePostale = x['attributes']['Postal']
+            commune = x['attributes']['City']
 
-            with open('outputs/ZoneDNSFullAdressesZoneDNS.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
+            with open('outputs/ZoneDNSFullAdresses.csv', 'a', encoding='utf-16', newline='') as fichierSortie:
                 csv_sortie = csv.writer(fichierSortie, delimiter='\t')
-                fichierVide = os.stat('outputs/ZoneDNSFullAdressesZoneDNS.csv').st_size == 0
+                fichierVide = os.stat('outputs/ZoneDNSFullAdresses.csv').st_size == 0
 
                 if fichierVide:
-                    csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes', 'Codes'])
+                    csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes', 'Codes', 'Communes'])
                 else:
-                    csv_sortie.writerow([dns, adresse, latitude, longitude, codePostale])
+                    csv_sortie.writerow([dns, adresse, latitude, longitude, codePostale, commune])
             time.sleep(2)
         else:
             pass
