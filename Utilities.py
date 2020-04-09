@@ -147,7 +147,7 @@ def getFullAdress(zoneDNS):
                 fichierVide = os.stat('outputs/ZoneDNSFullAdresses.csv').st_size == 0
 
                 if fichierVide:
-                    csv_sortie.writerow(['Zone DNS', 'Adresses', 'Latitudes', 'Longitudes', 'Codes', 'Communes'])
+                    csv_sortie.writerow(['DNS Source', 'Adresses', 'Latitudes', 'Longitudes', 'Codes', 'Communes'])
                 else:
                     csv_sortie.writerow([dns, adresse, latitude, longitude, codePostale, commune])
             time.sleep(2)
