@@ -38,7 +38,7 @@ def Scrapper(Referring,Cible):
         soup = BeautifulSoup(req.text, 'lxml') #BeautifulSoup récupére la totalité de la page signalée au dessus
         for link in soup.find_all('a', href=re.compile(Cible)): #la fonction recherche le lien renvoyant vers la page de PortCros sur la page stockée
             linkP = link.parent #On récupére le contexte du lien présent sur la page
-            time.sleep(2) #On marque une pause pour éviter le blacklisting potentiel de l'adresse IP sur le site.
+        time.sleep(2) #On marque une pause pour éviter le blacklisting potentiel de l'adresse IP sur le site.
     return linkP #On retourne le resultat dans DfVar['Scrapped']
 
 
