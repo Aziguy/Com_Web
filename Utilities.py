@@ -53,8 +53,8 @@ def showEnumerateMarkers(fichier):
     # icons utilisant plugins.BeautifyIcon
     for (index, row) in df.iterrows():
         folium.Marker(location=[row['Latitudes'], row['Longitudes']], popup=row['Zone DNS'], tooltip=row['Adresses'],
-                      icon=plugins.BeautifyIcon(number=row['Occurrences'], border_color='#000', border_width=1,
-                                                text_color='#FFF', inner_icon_style='margin-top:0px;')).add_to(m)
+                      icon=plugins.BeautifyIcon(number=row['Occurrences'], border_color='blue', border_width=1,
+                                                text_color='red', inner_icon_style='margin-top:0px;')).add_to(m)
     return m.save(outfile='outputs/EnumerateMarkersZoneDNS.html')  # Le fichier de sortie est une map au format "html"
 # =============================================================================
 # Fonction qui permet de représenter un fichier d'adresse sur la carte
@@ -83,7 +83,7 @@ def showChoroplethFromAdress(f_csv, f_geojson):
     # Chargement du fichier csv
     zoneDNS = pd.read_csv(f_csv, encoding='utf-16', sep='\t')
     # Carte
-    bins = list(zoneDNS['Communes'].quantile([0, 0.25, 0.5, 0.75, 1]))
+    bins = list(zoneDNS['Occurrences'].quantile([0, 0.25, 0.5, 0.75, 1]))
     mapChoropleth = folium.Map([43.9351691, 6.0679194],
                                zoom_start=6)  # La localisation de départ pour cadrer les résultats
     # Choropleth
@@ -126,7 +126,7 @@ def getFullAdress(zoneDNS):
     longitude = 0
     codePostale = 0
     csv_sortie = []
-    gis = GIS("http://www.arcgis.com", "Pseudo2020", "MotDePasse2020")
+    gis = GIS("http://www.arcgis.com", "Aziguy88", "LYNEpromotion2012")
     if zoneDNS == '':
         pass
     else:
