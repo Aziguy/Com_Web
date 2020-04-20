@@ -13,6 +13,7 @@ import pandas as pd
 from arcgis.geocoding import geocode
 from arcgis.gis import GIS
 from folium import plugins
+from geopy.extra.rate_limiter import RateLimiter
 from geopy.geocoders import Nominatim
 from haversine import haversine
 
@@ -165,9 +166,7 @@ def getFullAdress(zoneDNS):
 def getFullAdressByGeopy(maChaine):
     monAdresse = ''
     mesCoordonnees = []
-    geolocator = Nominatim(user_agent="my-application")
-    geolocator = Nominatim(user_agent="my-application")
-    from geopy.extra.rate_limiter import RateLimiter
+    geolocator = Nominatim(user_agent="my-application", timeout=3)
     geocode = RateLimiter(geolocator.geocode, min_delay_seconds=1)
     if maChaine == '':
         pass
