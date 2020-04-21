@@ -18,7 +18,6 @@ entrypoints==0.3
 Fiona==1.8.4
 folium==0.10.1
 future==0.18.2
-GDAL==2.3.3
 geocoder==1.38.1
 geographiclib==1.50
 geopandas==0.6.1
