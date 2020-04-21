@@ -7,4 +7,4 @@
 #### III. Réseaux filtrés par le contenu. 
 
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Aziguy/Com_Web/master?filepath=Documentation.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Aziguy/Com_Web/master)
