@@ -20,7 +20,6 @@ from haversine import haversine
 # geopy.geocoders.options.default_user_agent = 'my_app/1'
 geopy.geocoders.options.default_timeout = None
 
-
 # folium.Choropleth
 
 # =============================================================================
