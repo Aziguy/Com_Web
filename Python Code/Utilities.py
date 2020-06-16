@@ -2,23 +2,179 @@
 import csv
 import json
 import os
-import socket as so
-import time
-from urllib.parse import urlparse
 
 import folium
 import geocoder
 import geopy
 import pandas as pd
+import socket as so
+import time
+from tqdm.auto import tqdm
+from urllib.parse import urlparse
+
+tqdm.pandas()
 from arcgis.geocoding import geocode
 from arcgis.gis import GIS
 from folium import plugins
 from geopy.extra.rate_limiter import RateLimiter
 from geopy.geocoders import Nominatim
 from haversine import haversine
+from bs4 import BeautifulSoup
+from bs4.element import Comment
+import urllib.request
+import spacy
+from collections import Counter
+# nltk.download('stopwords') # Télécharger les `stopwords`
+from nltk.corpus import stopwords
+
+stopWords = stopwords.words('french')
+nlp = spacy.load('fr_core_news_sm')  # On charge le modèle français
+# nlp = spacy.load('en_core_web_sm') # On charge le modèle anglais
+nlp2 = spacy.load('en_core_web_lg')  # On charge le modèle le plus large
 
 # geopy.geocoders.options.default_user_agent = 'my_app/1'
 geopy.geocoders.options.default_timeout = None
+
+
+# =============================================================================
+# Fonctions `tag_visible()` et `text_from_html()` pour scrapper le contenu de la page d'accueil d'une url
+# Elle récupère tout ce qui est vu par l'utilisateur sur la page (tous les textes)
+# =============================================================================
+def tag_visible(element):
+    if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
+        return False
+    if isinstance(element, Comment):
+        return False
+    return True
+
+
+def text_from_html(body):
+    soup = BeautifulSoup(body, 'html.parser')
+    texts = soup.findAll(text=True)
+    visible_texts = filter(tag_visible, texts)
+    return u" ".join(t.strip() for t in visible_texts)
+
+
+#######################
+# TRAITEMENT DE TEXTE
+#######################
+
+# Cette méthode permet de tokenizer mon texte
+# Elle retourne une liste
+
+def return_token(texte):
+    # Tokeniser la phrase
+    mod = nlp(texte)
+    # Retourner le texte de chaque token
+    return [X.text for X in mod]
+
+
+# Cette méthode permet de supprimer les stopWords dans mon texte
+# Elle retourne une liste
+
+def cleanWords(liste):
+    clean_words = []
+    for token in liste:
+        if token not in stopWords:
+            clean_words.append(token)
+    return clean_words
+
+
+# Cette méthode `tupleToString` permet de convertir un tuple en chaine de caractère
+# Elle prend en  paramètre un tuple et retourne une chaine (string) qui sera facilement stockable dans un dataframe.
+# A l'aide de Spacy (variable `nlp`ou `nlp2`) on pourra facilement itérer sur chaque mot de la chaine de caractère.
+def tupleToString(monTuple):
+    maListe = []
+    maChaine = ""
+    for element in monTuple:
+        temp = element[0]
+        maListe.append(temp)
+    maChaine = " ".join(str(x) for x in maListe)
+
+    return maChaine
+
+
+# Cette méthode ``wordExtractorFromFile`` permet de recenser les mots les plus fréquents dans un texte récupéré via le scraping
+# Elle prend en paramètre un fichier excel et retourne un dictionnaire ayant pour clé le type de site et pour valeur la liste des mots du type
+def wordExtractorFromFile(fichier):
+    # Mes variables
+    dicoMotsType = dict()
+    common_words = tuple()
+    lien, cat = "", ""
+    # Lecture de mon fichier Excel
+    data = pd.read_excel(fichier, "siteType", usecols="A:C")
+    for indice, ligne in data.iterrows():
+        cat = ligne['Catégories']
+        lien = ligne['URL Acteurs']
+
+        try:
+            # reponse = requests.get("http://{}".format(lien))
+            html = urllib.request.urlopen("http://{0}".format(lien)).read()
+            monTexte = text_from_html(html)
+            # NLP : Natural Language Processing
+            doc = nlp(monTexte)
+            allWords = [token.text for token in doc if
+                        token.is_stop != True and token.is_punct != True and token.is_space != True and token.is_digit != True and token.is_ascii and token.is_bracket != True and token.is_currency != True and len(
+                            token) > 1]
+            # 20 mots les plus fréquents
+            word_freq = cleanWords(allWords)
+            word_freq_count = Counter(word_freq)
+            common_words = word_freq_count.most_common(20)  # common_words contient ici un tuple(mot, nbre occurence)
+
+            for mot in common_words:
+                if cat not in dicoMotsType:
+                    dicoMotsType[cat] = []
+                    dicoMotsType[cat].append(mot[0])
+                else:
+                    dicoMotsType[cat].append(mot[0])
+        except:
+            common_wordsm = None
+    return dicoMotsType
+
+
+# Nettoyage du dictionnaire retourné par `wordExtractorFromFile(fichier)` à l'aide de la méthode ``cleanDictionnaire(monDico)``
+# Elle nous retourne ici créer un nouveau dictionnaire `dicoMotTypeClean` qui contient la liste unique de mots représentant un type de site
+def cleanDictionnaire(monDico):
+    dicoMotsType = monDico
+    dicoMotTypeClean = dict()
+
+    for cle, valeur in dicoMotsType.items():
+        for val in valeur:
+            dicoMotTypeClean[cle] = set(valeur)
+
+    return dicoMotTypeClean
+
+
+# Cette méthode `wordExtratorFromUrl(lien)`
+# Elle prend en paramètre un lien (url) et retourne les vingt (20) mots les plus fréquents dans la page d'acceuil du lien.
+def wordExtratorFromUrl(lien):
+    # Mes variables
+    common_words = tuple()
+    maChaine = ""
+    try:
+        # reponse = requests.get("http://{}".format(lien))
+        html = urllib.request.urlopen("http://{0}".format(lien)).read()
+        monTexte = text_from_html(html)
+        # NLP : Natural Language Processing
+        doc = nlp(monTexte)
+        allWords = [token.text for token in doc if
+                    token.is_stop != True and token.is_punct != True and token.is_space != True and token.is_digit != True and token.is_ascii and token.is_bracket != True and token.is_currency != True and len(
+                        token) > 1]
+        # 20 mots les plus fréquents
+        word_freq = cleanWords(allWords)
+        word_freq_count = Counter(word_freq)
+        common_words = word_freq_count.most_common(20)  # common_words contient ici un tuple(mot, nbre occurence)
+    except:
+        common_wordsm = None
+    # transformation de mon tuple en String
+    maChaine = tupleToString(common_words)
+
+    return maChaine
+
+
+###################
+# MAP WITH FOLIUM
+###################
 
 # folium.Choropleth
 
