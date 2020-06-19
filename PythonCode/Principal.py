@@ -1,7 +1,6 @@
 # Mes importations
-import networkx as nx
-
 import Utilities as utils
+import networkx as nx
 
 # =============================================================================
 # On peut appeller la fonction exportCsvAhref(monFichierCSV) ici

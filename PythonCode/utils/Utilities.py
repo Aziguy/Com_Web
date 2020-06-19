@@ -2,15 +2,15 @@
 import csv
 import json
 import os
+import socket as so
+import time
+from urllib.parse import urlparse
 
 import folium
 import geocoder
 import geopy
 import pandas as pd
-import socket as so
-import time
 from tqdm.auto import tqdm
-from urllib.parse import urlparse
 
 tqdm.pandas()
 from arcgis.geocoding import geocode
@@ -28,9 +28,10 @@ from collections import Counter
 from nltk.corpus import stopwords
 
 stopWords = stopwords.words('french')
-nlp = spacy.load('fr_core_news_sm')  # On charge le modèle français
+# nlp = spacy.load('fr_core_news_sm')  # On charge le modèle français
 # nlp = spacy.load('en_core_web_sm') # On charge le modèle anglais
-nlp2 = spacy.load('en_core_web_lg')  # On charge le modèle le plus large
+# nlp2 = spacy.load('en_core_web_lg')  # On charge le modèle le plus large
+nlp3 = spacy.load('fr_core_news_lg')  # On charge le modèle le large en français
 
 # geopy.geocoders.options.default_user_agent = 'my_app/1'
 geopy.geocoders.options.default_timeout = None
@@ -64,7 +65,7 @@ def text_from_html(body):
 
 def return_token(texte):
     # Tokeniser la phrase
-    mod = nlp(texte)
+    mod = nlp3(texte)
     # Retourner le texte de chaque token
     return [X.text for X in mod]
 
@@ -112,7 +113,7 @@ def wordExtractorFromFile(fichier):
             html = urllib.request.urlopen("http://{0}".format(lien)).read()
             monTexte = text_from_html(html)
             # NLP : Natural Language Processing
-            doc = nlp(monTexte)
+            doc = nlp3(monTexte)
             allWords = [token.text for token in doc if
                         token.is_stop != True and token.is_punct != True and token.is_space != True and token.is_digit != True and token.is_ascii and token.is_bracket != True and token.is_currency != True and len(
                             token) > 1]
@@ -156,7 +157,7 @@ def wordExtratorFromUrl(lien):
         html = urllib.request.urlopen("http://{0}".format(lien)).read()
         monTexte = text_from_html(html)
         # NLP : Natural Language Processing
-        doc = nlp(monTexte)
+        doc = nlp3(monTexte)
         allWords = [token.text for token in doc if
                     token.is_stop != True and token.is_punct != True and token.is_space != True and token.is_digit != True and token.is_ascii and token.is_bracket != True and token.is_currency != True and len(
                         token) > 1]

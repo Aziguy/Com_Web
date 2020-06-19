@@ -1,7 +1,6 @@
 # Mes importations
-from tqdm.auto import tqdm
-
 import Utilities as utils
+from tqdm.auto import tqdm
 
 # Récupération des adresses des zones DNS
 tqdm.pandas()
