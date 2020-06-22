@@ -1,5 +1,3 @@
-from PythonCode.utils import Utilities as utils
-from tqdm.auto import tqdm
 from tqdm.auto import tqdm
 
 from PythonCode.utils import Utilities as utils
@@ -13,6 +11,6 @@ dictionnaire = utils.wordExtractorFromFile(monFichier)
 dico_Ok = utils.cleanDictionnaire(dictionnaire)
 
 print("Avant : ")
-print([len(dictionnaire[x]) for x in dictionnaire])
+print([len(dictionnaire[d]) for d in dictionnaire])
 print("Après : ")
-print([len(dico_Ok[x]) for x in dico_Ok])
+print([len(dico_Ok[d]) for d in dico_Ok])
