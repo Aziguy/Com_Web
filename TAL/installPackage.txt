@@ -44,5 +44,5 @@ spacy-langdetect==0.1.2
 tqdm==4.42.1
 ujson==1.35
 unicodecsv==0.14.1
-urllib3==1.25.8
+urllib3==1.26.5
 
